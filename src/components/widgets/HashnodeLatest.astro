@@ -1,0 +1,99 @@
+---
+import { XMLParser } from 'fast-xml-parser';
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+import Headline from '~/components/ui/Headline.astro';
+import Button from '~/components/ui/Button.astro';
+import type { Widget } from '~/types';
+
+interface HashnodePost {
+  title: string;
+  brief: string;
+  url: string;
+  coverImageUrl?: string;
+}
+
+export interface Props extends Widget {
+  title?: string;
+  subtitle?: string;
+  tagline?: string;
+  hashnodeHost?: string;
+}
+
+const {
+  title = 'Technical Writing',
+  subtitle,
+  tagline,
+  hashnodeHost = 'supunihashnodedev.hashnode.dev',
+  id,
+  isDark = false,
+  classes = {},
+  bg,
+} = Astro.props;
+
+const blogUrl = `https://${hashnodeHost}`;
+
+// Hashnode retired free GraphQL API access (May 2026, now requires a paid Pro
+// plan) — every publication still exposes a free RSS feed, so we read that
+// instead: https://hashnode.com/changelog/2026-05-13-graphql-api-paid-access
+let posts: HashnodePost[] = [];
+try {
+  const res = await fetch(`${blogUrl}/rss.xml`);
+  if (res.ok) {
+    const xml = await res.text();
+    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' });
+    const feed = parser.parse(xml);
+    const rawItems = feed?.rss?.channel?.item ?? [];
+    const items = Array.isArray(rawItems) ? rawItems : [rawItems];
+
+    posts = items.slice(0, 4).map((item): HashnodePost => ({
+      title: String(item.title ?? ''),
+      brief: String(item.description ?? '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 160),
+      url: String(item.link ?? blogUrl),
+      coverImageUrl: item.enclosure?.['@_url'],
+    }));
+  }
+} catch {
+  posts = [];
+}
+---
+
+<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
+  <Headline title={title} subtitle={subtitle} tagline={tagline} />
+
+  {
+    posts.length > 0 ? (
+      <div class="grid gap-6 md:grid-cols-2">
+        {posts.map((post) => (
+          <a
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex flex-col rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow transition hover:shadow-lg"
+          >
+            {post.coverImageUrl && (
+              <img
+                src={post.coverImageUrl}
+                alt={post.title}
+                loading="lazy"
+                class="w-full h-48 object-cover bg-gray-400 dark:bg-slate-700"
+              />
+            )}
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2 dark:text-slate-300">{post.title}</h3>
+              <p class="text-muted dark:text-slate-400">{post.brief}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center">
+        <Button variant="primary" href={blogUrl} target="_blank">
+          Read my articles on Hashnode &rarr;
+        </Button>
+      </div>
+    )
+  }
+</WidgetWrapper>

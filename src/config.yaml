@@ -1,31 +1,25 @@
 site:
-  name: AstroWind
-  site: 'https://astrowind.vercel.app'
+  name: Supuni Dissanayake
+  site: 'https://supuni-dissanayake.netlify.app' # placeholder — update once the Netlify site is created
   base: '/'
   trailingSlash: false
-
-  googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
 
 # Default SEO metadata
 metadata:
   title:
-    default: AstroWind
-    template: '%s — AstroWind'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+    default: Supuni Dissanayake
+    template: '%s — Supuni Dissanayake'
+  description: 'Portfolio of Supuni Dissanayake — IT undergraduate at the University of Moratuwa specializing in full-stack development and UI/UX design.'
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: AstroWind
+    site_name: Supuni Dissanayake
     images:
       - url: '~/assets/images/default.png'
         width: 1200
         height: 628
     type: website
-  twitter:
-    handle: '@arthelokyo'
-    site: '@arthelokyo'
-    cardType: summary_large_image
 
 i18n:
   language: en

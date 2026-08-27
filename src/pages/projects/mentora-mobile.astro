@@ -1,0 +1,669 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mentora Student App — Supuni Dissanayake</title>
+<meta name="description" content="A Flutter client built end-to-end against a live production backend — course discovery, AI-matched recommendations, and the full enrollment lifecycle." />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --ink: #14181d;
+    --surface: #1b2129;
+    --surface-2: #212934;
+    --border: #2a323c;
+    --text: #e9e6df;
+    --text-dim: #9ba3ac;
+    --text-faint: #6b7280;
+    --amber: #d9a441;
+    --amber-soft: #e8c07a;
+    --teal: #4fb3a3;
+    --teal-soft: #7ecdc0;
+    --danger: #d97757;
+    --shadow: 0 1px 0 rgba(0,0,0,0.4);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ink: #f4f2ed;
+      --surface: #ffffff;
+      --surface-2: #faf8f3;
+      --border: #e3ded0;
+      --text: #21252b;
+      --text-dim: #5b6472;
+      --text-faint: #8a8f97;
+      --amber: #a8752a;
+      --amber-soft: #8a5f20;
+      --teal: #2a8577;
+      --teal-soft: #1f6c60;
+      --shadow: 0 1px 0 rgba(0,0,0,0.04);
+    }
+  }
+
+  :root[data-theme="light"] {
+    --ink: #f4f2ed;
+    --surface: #ffffff;
+    --surface-2: #faf8f3;
+    --border: #e3ded0;
+    --text: #21252b;
+    --text-dim: #5b6472;
+    --text-faint: #8a8f97;
+    --amber: #a8752a;
+    --amber-soft: #8a5f20;
+    --teal: #2a8577;
+    --teal-soft: #1f6c60;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--amber); color: #14181d; }
+
+  a { color: var(--teal-soft); }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+  }
+
+  h1, h2, h3 {
+    font-family: "Fraunces", Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    text-wrap: balance;
+    margin: 0;
+    color: var(--text);
+  }
+
+  code, .mono {
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 88px 24px 120px;
+  }
+
+  /* ---------- Header ---------- */
+
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .kicker::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--teal-soft);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal-soft) 25%, transparent);
+    flex: none;
+  }
+
+  h1.title {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+  h1.title em {
+    font-style: italic;
+    color: var(--amber-soft);
+  }
+
+  .dek {
+    margin-top: 18px;
+    max-width: 62ch;
+    font-size: 1.1rem;
+    color: var(--text-dim);
+  }
+
+  .meta-row {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .meta-cell {
+    background: var(--surface);
+    padding: 16px 18px;
+  }
+  .meta-cell .k {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .meta-cell .v {
+    margin-top: 5px;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  /* ---------- Sections ---------- */
+
+  section { margin-top: 76px; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .section-num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--text-faint);
+    flex: none;
+  }
+  h2.section-title {
+    font-size: 1.5rem;
+  }
+
+  p { color: var(--text-dim); margin: 14px 0; max-width: 66ch; }
+  p.lead { color: var(--text); font-size: 1.05rem; }
+  strong { color: var(--text); font-weight: 600; }
+
+  /* ---------- Stack tags ---------- */
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .tag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+  .tag.built { border-color: color-mix(in srgb, var(--amber) 45%, var(--border)); color: var(--amber-soft); }
+  .tag.consumed { border-color: color-mix(in srgb, var(--teal) 45%, var(--border)); color: var(--teal-soft); }
+
+  .legend {
+    margin-top: 14px;
+    display: flex;
+    gap: 20px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot.built { background: var(--amber); }
+  .dot.consumed { background: var(--teal); }
+
+  /* ---------- Architecture diagram ---------- */
+
+  .arch {
+    margin-top: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+  .arch-row {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 16px;
+    align-items: stretch;
+    padding: 12px 0;
+  }
+  .arch-row + .arch-row { border-top: 1px dashed var(--border); }
+  .arch-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding-top: 10px;
+  }
+  .arch-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .arch-box {
+    font-size: 13px;
+    padding: 9px 13px;
+    border-radius: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .arch-box.core {
+    border-color: color-mix(in srgb, var(--teal) 50%, var(--border));
+    color: var(--teal-soft);
+  }
+  .arch-flow {
+    margin-top: 4px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+  }
+
+  /* ---------- Phase timeline ---------- */
+
+  .phase {
+    position: relative;
+    padding: 4px 0 4px 44px;
+    margin-top: 4px;
+  }
+  .phase:not(:last-child) {
+    padding-bottom: 30px;
+  }
+  .phase::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 30px;
+    bottom: -6px;
+    width: 1px;
+    background: var(--border);
+  }
+  .phase:last-child::before { display: none; }
+  .phase-num {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--amber-soft);
+  }
+  .phase-title {
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--text);
+  }
+  .phase-desc {
+    margin: 6px 0 0;
+    color: var(--text-dim);
+    font-size: 0.96rem;
+  }
+  .phase.added .phase-num { color: var(--teal-soft); }
+
+  /* ---------- Bug log ---------- */
+
+  .bug {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--danger);
+    border-radius: 0 10px 10px 0;
+    background: var(--surface);
+    padding: 16px 18px;
+    margin-top: 14px;
+  }
+  .bug-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--danger);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .bug-title {
+    margin-top: 8px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .bug-body { margin: 6px 0 0; color: var(--text-dim); font-size: 0.95rem; }
+
+  /* ---------- Skills ---------- */
+
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .skill {
+    font-size: 13.5px;
+    padding: 9px 14px;
+    border-radius: 9px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  footer {
+    margin-top: 100px;
+    padding-top: 26px;
+    border-top: 1px solid var(--border);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .back-link {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 50;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    text-decoration: none;
+    box-shadow: var(--shadow);
+  }
+  .back-link:hover { color: var(--teal-soft); }
+
+  @media (max-width: 560px) {
+    .page { padding: 56px 18px 90px; }
+    .meta-row { grid-template-columns: 1fr; }
+    .arch-row { grid-template-columns: 1fr; }
+    .arch-label { padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="/#projects">&larr; Portfolio</a>
+
+<div class="page">
+
+  <header>
+    <div class="kicker">Portfolio Case Study — Mobile Engineering</div>
+    <h1 class="title">Mentora <em>Student App</em></h1>
+    <p class="dek">
+      A Flutter client for Mentora, a Sri Lankan tutoring marketplace — course discovery, an
+      AI-matched recommendations engine, and the full enrollment lifecycle, built end-to-end
+      against a live, pre-existing production backend rather than a spec or a mock.
+    </p>
+
+    <div class="meta-row">
+      <div class="meta-cell">
+        <div class="k">Role</div>
+        <div class="v">Sole app-side build</div>
+      </div>
+      <div class="meta-cell">
+        <div class="k">Platform</div>
+        <div class="v">Flutter — Android · iOS · Web</div>
+      </div>
+      <div class="meta-cell">
+        <div class="k">Backend</div>
+        <div class="v">Node/Express + PostgreSQL (pre-existing, consumed)</div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Overview</h2>
+    </div>
+    <p class="lead">
+      The Mentora backend already existed — a working tutoring-marketplace API with courses,
+      tutors, enrollments, and an AI recommendation endpoint — but had no client. The brief was
+      to build the entire <strong>student-facing</strong> app from an empty <code>flutter
+      create</code> scaffold: authentication, course browsing, profile management, the
+      booking/enrollment flow, and an AI-powered "For You" matching tab, all wired to that real
+      backend from day one.
+    </p>
+    <p>
+      Tutor-side, admin, communities/feed, and real-time (Socket.io) features were explicitly
+      out of scope — this is the student's app, not the whole platform.
+    </p>
+
+    <div class="tags">
+      <span class="tag built">Flutter</span>
+      <span class="tag built">Dart</span>
+      <span class="tag built">Provider</span>
+      <span class="tag built">flutter_secure_storage</span>
+      <span class="tag built">image_picker</span>
+      <span class="tag consumed">Node.js / Express</span>
+      <span class="tag consumed">PostgreSQL</span>
+      <span class="tag consumed">Google Gemini</span>
+      <span class="tag consumed">REST / JSON</span>
+    </div>
+    <div class="legend">
+      <span><i class="dot built"></i>built in this app</span>
+      <span><i class="dot consumed"></i>existing service, integrated</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Architecture</h2>
+    </div>
+    <p>
+      Provider-based and feature-sliced: every domain — auth, courses, profile, enrollments,
+      recommendations — follows the same <code>model → service → provider → screen</code>
+      pipeline, so a new feature is additive rather than a rewrite.
+    </p>
+
+    <div class="arch">
+      <div class="arch-row">
+        <div class="arch-label">Screens</div>
+        <div class="arch-boxes">
+          <span class="arch-box">Auth</span>
+          <span class="arch-box">Courses</span>
+          <span class="arch-box">For You</span>
+          <span class="arch-box">Enrollments</span>
+          <span class="arch-box">Profile</span>
+        </div>
+      </div>
+      <div class="arch-flow">↕ watch / read</div>
+      <div class="arch-row">
+        <div class="arch-label">Providers</div>
+        <div class="arch-boxes">
+          <span class="arch-box">ChangeNotifier state per feature — loading / data / error</span>
+        </div>
+      </div>
+      <div class="arch-flow">↕ calls</div>
+      <div class="arch-row">
+        <div class="arch-label">Services</div>
+        <div class="arch-boxes">
+          <span class="arch-box">Thin per-feature HTTP wrappers</span>
+        </div>
+      </div>
+      <div class="arch-flow">↕ every request</div>
+      <div class="arch-row">
+        <div class="arch-label">Core</div>
+        <div class="arch-boxes">
+          <span class="arch-box core">ApiClient — auth header, typed errors, 401 handling</span>
+          <span class="arch-box core">TokenStorage — secure, in-memory cached</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:22px">
+      The one piece every feature shares is <strong>ApiClient</strong>: it attaches the JWT to
+      every request, decodes responses into a typed <code>ApiException</code> on failure, and —
+      since the backend has no refresh-token flow — clears the session and forces a re-login the
+      moment an existing token is rejected with a 401. A login attempt with a <em>bad
+      password</em> also returns a 4xx, but deliberately <em>doesn't</em> trigger that path,
+      since no session existed yet to invalidate. Getting that distinction right was the
+      difference between "log back in" and an app that silently boots you out while you're still
+      typing your password wrong.
+    </p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">How it was built</h2>
+    </div>
+    <p>
+      Six incremental phases, each shipped and verified against the live backend before the
+      next began — plus two later additions once the core loop was stable.
+    </p>
+
+    <div style="margin-top:28px">
+      <div class="phase">
+        <div class="phase-num">0</div>
+        <div class="phase-title">Scaffolding</div>
+        <p class="phase-desc">Base-URL strategy (per-platform default, <code>--dart-define</code> override for emulators/devices), the token store, and the API client — before any feature touched them.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">1</div>
+        <div class="phase-title">Authentication</div>
+        <p class="phase-desc">Three-step registration (email → OTP → details) matching the backend's verification window exactly, login, forgot/reset password, and session persistence across restarts.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">2</div>
+        <div class="phase-title">Course browsing</div>
+        <p class="phase-desc">Public search, filters, pagination, and detail + reviews — reachable with no account, which meant reworking the app's root navigation so browsing wasn't gated behind login.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">3</div>
+        <div class="phase-title">Student profile</div>
+        <p class="phase-desc">Live stats dashboard, photo upload via multipart form data, account deletion.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">4</div>
+        <div class="phase-title">Enrollments</div>
+        <p class="phase-desc">Book, edit, and cancel a class; a status-tabbed list matching the backend's actual enum — new bookings land in <code>requested</code>, not the more intuitive <code>pending</code>.</p>
+      </div>
+      <div class="phase">
+        <div class="phase-num">5</div>
+        <div class="phase-title">Polish &amp; docs</div>
+        <p class="phase-desc">Full lint pass, architecture documentation, dead-code removal.</p>
+      </div>
+      <div class="phase added">
+        <div class="phase-num">+</div>
+        <div class="phase-title">AI recommendations</div>
+        <p class="phase-desc">A "For You" tab: a preference form (subjects, level, mode, schedule, budget, goal) posted to the backend's Gemini-backed matching endpoint, returning a ranked, per-course match score with a generated explanation.</p>
+      </div>
+      <div class="phase added">
+        <div class="phase-num">+</div>
+        <div class="phase-title">Visual design pass</div>
+        <p class="phase-desc">A custom theme system (palette, type scale, component themes) applied globally, a welcome screen, and a responsive-width fix so the app renders correctly on both a phone and a desktop browser window.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Testing against the real thing</h2>
+    </div>
+    <p class="lead">
+      There was no backend test suite or mock server to build against — so instead of mocking
+      responses, almost the entire test suite calls the <strong>live backend</strong> directly:
+      real login, real course data, a real create → edit → cancel enrollment round-trip, cleaned
+      up after itself either way. That choice is what surfaced the bugs below — they were
+      invisible to anything that assumed the API matched its own documentation.
+    </p>
+
+    <div class="bug">
+      <div class="bug-head"><span>found via live test</span><span>reviews endpoint</span></div>
+      <div class="bug-title">A shell tool was lying about the response shape</div>
+      <p class="bug-body">
+        PowerShell's <code>Invoke-RestMethod | ConvertTo-Json</code> renders a raw JSON array as
+        a convincing-looking <code>&#123;"value": [...], "Count": n&#125;</code> object — a display quirk,
+        not a real envelope. Trusting it would have shipped a model expecting a wrapper that
+        never existed. Re-checking through the actual Dart HTTP client showed
+        <code>GET /courses/:id/reviews</code> returns a plain array.
+      </p>
+    </div>
+
+    <div class="bug">
+      <div class="bug-head"><span>found via live test</span><span>enrollment update</span></div>
+      <div class="bug-title">PUT silently required the full record, not a patch</div>
+      <p class="bug-body">
+        Sending only the changed field to <code>PUT /enrollments/:id</code> returned a plain
+        400 with no hint why. The endpoint expects the same full field set as
+        <code>POST</code> — undocumented, only visible by trying it against the real server.
+      </p>
+    </div>
+
+    <div class="bug">
+      <div class="bug-head"><span>found via live data</span><span>course schedules</span></div>
+      <div class="bug-title">Seed data broke the booking form's day/time picker</div>
+      <p class="bug-body">
+        A meaningful share of courses store <code>schedule</code> as a plain string or
+        <code>null</code> instead of the documented <code>&#123;"day": ["times"]&#125;</code> shape — so
+        the dropdown had nothing to populate, while the form still demanded a selection. Fixed
+        by falling back to free-text day/time entry whenever a course has no structured
+        schedule to offer.
+      </p>
+    </div>
+
+    <div class="bug">
+      <div class="bug-head"><span>found via manual QA</span><span>images</span></div>
+      <div class="bug-title">Broken image URLs decoded as HTML, not pixels</div>
+      <p class="bug-body">
+        A few course images pointed at dead links that returned an HTML error page with a 200
+        status. Flutter's image codec doesn't know that isn't a picture — it just throws. Added
+        a themed fallback icon everywhere a network image is used, instead of a raw error
+        widget on screen.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Skills demonstrated</h2>
+    </div>
+    <div class="skills">
+      <span class="skill">State-management architecture</span>
+      <span class="skill">REST API integration</span>
+      <span class="skill">Defensive JSON modeling</span>
+      <span class="skill">Live integration testing</span>
+      <span class="skill">Auth &amp; session handling</span>
+      <span class="skill">Responsive Flutter layout</span>
+      <span class="skill">Design-system theming</span>
+      <span class="skill">Debugging via primary-source verification</span>
+      <span class="skill">Working from an imperfect, live backend</span>
+    </div>
+  </section>
+
+  <footer>
+    <span>Mentora Student App — engineering case study</span>
+    <span>Flutter · Provider · REST</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

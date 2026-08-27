@@ -1,0 +1,79 @@
+---
+import type { Project } from '~/types';
+
+import Image from '~/components/common/Image.astro';
+
+import { findImage } from '~/utils/images';
+import { getPermalink } from '~/utils/permalinks';
+
+export interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const image = await findImage(project.image);
+
+const link = getPermalink(`projects/${project.id}`);
+---
+
+<article
+  class="mb-6 flex flex-col transition intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+>
+  <div class="relative md:h-52 bg-gray-400 dark:bg-slate-700 rounded shadow-lg mb-6">
+    {
+      image ? (
+        <a href={link}>
+          <Image
+            src={image}
+            class="w-full md:h-full object-contain rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+            widths={[400, 900]}
+            width={900}
+            height={506}
+            sizes="(max-width: 900px) 400px, 900px"
+            alt={project.title}
+            format="webp"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ) : (
+        <a
+          href={link}
+          class="flex h-40 md:h-full w-full items-center justify-center rounded shadow-lg bg-gray-400 dark:bg-slate-700 text-white/70 text-sm font-medium"
+        >
+          {project.title}
+        </a>
+      )
+    }
+  </div>
+
+  <div class="mb-2 flex flex-wrap items-center gap-2 text-xs">
+    {project.category && <span class="font-semibold uppercase tracking-wide text-primary">{project.category}</span>}
+    {project.status === 'ongoing' && (
+      <span class="rounded-full bg-blue-100 px-2 py-0.5 font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+        Ongoing
+      </span>
+    )}
+  </div>
+
+  <h3 class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300">
+    <a class="inline-block hover:text-primary dark:hover:text-blue-700 transition ease-in duration-200" href={link}>
+      {project.title}
+    </a>
+  </h3>
+
+  <p class="text-muted dark:text-slate-400">
+    {project.role === 'contributed' && <span class="font-medium">Contributed &middot; </span>}
+    {project.summary}
+  </p>
+
+  <div class="mt-3 flex flex-wrap gap-1.5">
+    {
+      project.stack.slice(0, 4).map((tech) => (
+        <span class="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-slate-800 dark:text-slate-300">
+          {tech}
+        </span>
+      ))
+    }
+  </div>
+</article>

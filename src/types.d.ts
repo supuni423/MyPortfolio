@@ -32,6 +32,33 @@ export interface Post {
   readingTime?: number;
 }
 
+export interface Project {
+  /** Unique ID identifying the project (also used as its URL slug). */
+  id: string;
+
+  title: string;
+  summary: string;
+  order?: number;
+  date?: Date;
+  status?: 'completed' | 'ongoing';
+  role: 'built' | 'contributed';
+  category?: string;
+  stack: string[];
+  image?: ImageMetadata | string;
+  links?: {
+    frontend?: string;
+    backend?: string;
+    repo?: string;
+  };
+
+  metadata?: MetaData;
+
+  draft?: boolean;
+
+  /** Rendered Astro component factory for the project write-up. */
+  Content?: AstroComponentFactory;
+}
+
 export interface Taxonomy {
   slug: string;
   title: string;
@@ -186,6 +213,8 @@ export interface Form {
   disclaimer?: Disclaimer;
   button?: string;
   description?: string;
+  /** Netlify Forms form name (also used as the `form-name` hidden field value). */
+  name?: string;
 }
 
 // WIDGETS

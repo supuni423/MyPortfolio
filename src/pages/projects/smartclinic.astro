@@ -1,0 +1,720 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SmartClinic — Supuni Dissanayake</title>
+<meta name="description" content="SmartClinic: a full-stack clinic management platform with role-based access and a data-grounded AI assistant, built solo by Supuni Dissanayake." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #16222C;
+    --ink-soft: #263442;
+    --mist: #4A5A68;
+    --mist-quiet: #7C8B98;
+    --ground: #F5FAFC;
+    --surface: #FFFFFF;
+    --surface-sunken: #EDF5F8;
+    --border: #DCE9EF;
+    --teal: #1D8AAE;
+    --teal-strong: #146E8C;
+    --teal-tint: #DEF2F7;
+    --violet: #7B3FE4;
+    --violet-tint: #EFE7FC;
+    --good: #0E9C6F;
+    --good-tint: #E1F7EE;
+    --warn: #B5720A;
+    --warn-tint: #FBF0DC;
+    --bad: #D93646;
+    --bad-tint: #FBE6E8;
+    --shadow: 0 1px 2px rgba(20,40,55,0.04), 0 8px 24px -12px rgba(20,40,55,0.14);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #EAF3F7;
+      --ink-soft: #CFE0E8;
+      --mist: #9FB3C0;
+      --mist-quiet: #718795;
+      --ground: #0A121A;
+      --surface: #101B24;
+      --surface-sunken: #0D1821;
+      --border: #1F313D;
+      --teal: #6FD1EC;
+      --teal-strong: #8FDCEF;
+      --teal-tint: #143440;
+      --violet: #B48CFF;
+      --violet-tint: #241C3E;
+      --good: #3FCE9E;
+      --good-tint: #0F2A22;
+      --warn: #E3A83E;
+      --warn-tint: #2E2310;
+      --bad: #F0778A;
+      --bad-tint: #341920;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px -16px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #EAF3F7;
+    --ink-soft: #CFE0E8;
+    --mist: #9FB3C0;
+    --mist-quiet: #718795;
+    --ground: #0A121A;
+    --surface: #101B24;
+    --surface-sunken: #0D1821;
+    --border: #1F313D;
+    --teal: #6FD1EC;
+    --teal-strong: #8FDCEF;
+    --teal-tint: #143440;
+    --violet: #B48CFF;
+    --violet-tint: #241C3E;
+    --good: #3FCE9E;
+    --good-tint: #0F2A22;
+    --warn: #E3A83E;
+    --warn-tint: #2E2310;
+    --bad: #F0778A;
+    --bad-tint: #341920;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px -16px rgba(0,0,0,0.6);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--teal-strong); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 500;
+    color: var(--ink);
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
+  .eyebrow {
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--teal-strong);
+  }
+
+  .num, .stat-value, .code-chip {
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.86em;
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.1em 0.42em;
+    color: var(--ink-soft);
+  }
+
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  .prose {
+    max-width: 700px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    padding: 84px 0 0;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -220px; right: -160px;
+    width: 560px; height: 560px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--teal-tint) 0%, transparent 70%);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+  .brandmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .brandmark .glyph {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-strong));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.05rem; font-weight: 700;
+    box-shadow: 0 6px 16px -4px rgba(29,138,174,0.5);
+  }
+  .brandmark .word {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.6rem, 5.4vw, 4.1rem);
+    line-height: 1.04;
+    margin: 0 0 22px;
+    position: relative;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--teal-strong);
+  }
+  .hero .lede {
+    font-size: 1.14rem;
+    color: var(--mist);
+    max-width: 620px;
+    margin: 0 0 30px;
+    position: relative;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .chip {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 7px 13px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--mist);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip b { color: var(--ink-soft); font-weight: 600; }
+
+  /* ECG divider */
+  .ecg {
+    width: 100%;
+    height: 46px;
+    display: block;
+    color: var(--teal);
+  }
+  .ecg path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ecg .sweep {
+    stroke-dasharray: 6 4000;
+    animation: sweep 7s linear infinite;
+    opacity: 0.9;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ecg .sweep { animation: none; stroke-dasharray: none; }
+  }
+  @keyframes sweep {
+    from { stroke-dashoffset: 4000; }
+    to   { stroke-dashoffset: 0; }
+  }
+
+  /* ---------- Vitals strip ---------- */
+  .vitals {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .vital {
+    padding: 22px 20px;
+    border-left: 1px solid var(--border);
+  }
+  .vital:first-child { border-left: none; }
+  .vital .stat-value {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+    line-height: 1.1;
+  }
+  .vital .stat-label {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mist-quiet);
+  }
+
+  /* ---------- Sections ---------- */
+  section { padding: 76px 0; }
+  section + section { border-top: 1px solid var(--border); }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 34px;
+    flex-wrap: wrap;
+  }
+  .section-head h2 {
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    margin: 6px 0 0;
+  }
+  .section-head .eyebrow { display: block; }
+  .section-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    color: var(--mist-quiet);
+  }
+
+  .pull {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 660px;
+    margin: 0 0 20px;
+  }
+  .prose p { margin: 0 0 16px; color: var(--ink-soft); }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .role-note {
+    display: flex;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  .role-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+  }
+  .role-card .who {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--teal-strong);
+    margin-bottom: 4px;
+  }
+  .role-card p { margin: 0; font-size: 0.88rem; color: var(--mist); }
+
+  /* ---------- Architecture split ---------- */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .arch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 26px 26px 24px;
+    box-shadow: var(--shadow);
+  }
+  .arch-card .tag {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .arch-card.fe .tag { background: var(--teal-tint); color: var(--teal-strong); }
+  .arch-card.be .tag { background: var(--violet-tint); color: var(--violet); }
+  .arch-card h3 { font-size: 1.25rem; margin: 0 0 4px; }
+  .arch-card .stack {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--mist-quiet);
+    margin: 0 0 16px;
+  }
+  .arch-card ul { margin: 0; padding: 0; list-style: none; }
+  .arch-card li {
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .arch-card li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.55em;
+    width: 7px; height: 7px;
+    border-radius: 2px;
+  }
+  .arch-card.fe li::before { background: var(--teal); }
+  .arch-card.be li::before { background: var(--violet); }
+
+  /* permission matrix */
+  .matrix-wrap { overflow-x: auto; margin-top: 32px; border: 1px solid var(--border); border-radius: 14px; }
+  table.matrix { width: 100%; border-collapse: collapse; background: var(--surface); font-size: 0.87rem; min-width: 480px; }
+  table.matrix th, table.matrix td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  table.matrix th {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mist-quiet);
+    background: var(--surface-sunken);
+  }
+  table.matrix tr:last-child td { border-bottom: none; }
+  table.matrix td.module { color: var(--ink-soft); font-weight: 500; }
+  .perm { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
+  .perm.yes { color: var(--good); }
+  .perm.no { color: var(--mist-quiet); }
+  .perm.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .perm.yes .perm.dot, .perm.yes::before { background: var(--good); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot.good { background: var(--good); }
+  .dot.mute { background: var(--border); }
+
+  /* ---------- Feature grid ---------- */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .feature-card .fhead {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .feature-card .ficon {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--teal-tint);
+    color: var(--teal-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .feature-card h3 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; margin: 0; color: var(--ink); }
+  .feature-card ul { margin: 0; padding-left: 18px; }
+  .feature-card li { font-size: 0.86rem; color: var(--mist); margin-bottom: 5px; }
+  .feature-card li:last-child { margin-bottom: 0; }
+  .feature-card.wide { grid-column: 1 / -1; }
+  .feature-card.ai {
+    background: linear-gradient(160deg, var(--surface) 0%, var(--violet-tint) 340%);
+    border-color: var(--border);
+  }
+  .feature-card.ai .ficon { background: var(--violet-tint); color: var(--violet); }
+
+  /* ---------- Case notes (engineering highlights) ---------- */
+  .case {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 20px;
+    padding: 26px 0;
+  }
+  .case + .case { border-top: 1px dashed var(--border); }
+  .case .tag2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mist-quiet);
+    padding-top: 3px;
+  }
+  .case h3 { font-size: 1.08rem; margin: 0 0 8px; font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--ink); }
+  .case p { margin: 0 0 8px; font-size: 0.92rem; color: var(--ink-soft); }
+  .case p:last-child { margin-bottom: 0; }
+  .case .fix { color: var(--good); font-weight: 500; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    padding: 48px 0 64px;
+  }
+  .foot-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .foot-row .who {
+    font-size: 0.85rem;
+    color: var(--mist);
+  }
+  .foot-row .who b { color: var(--ink-soft); }
+  .stackcloud {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .stackcloud span {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    color: var(--mist-quiet);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 4px 10px;
+  }
+
+  .back-link {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 50;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    text-decoration: none;
+    box-shadow: var(--shadow);
+  }
+  .back-link:hover { color: var(--teal-strong); }
+
+  @media (max-width: 760px) {
+    .vitals { grid-template-columns: repeat(2, 1fr); }
+    .vital:nth-child(3) { border-left: none; }
+    .arch-grid { grid-template-columns: 1fr; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .role-note { flex-direction: column; }
+    .case { grid-template-columns: 1fr; gap: 6px; }
+    .hero { padding-top: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="/#projects">&larr; Portfolio</a>
+
+<article>
+  <div class="wrap hero">
+    <div class="brandmark">
+      <span class="glyph">&#10010;</span>
+      <span class="word">SMARTCLINIC — CASE STUDY</span>
+    </div>
+    <h1>A clinic runs on <em>trust</em> and <em>timing</em> — the software has to earn both.</h1>
+    <p class="lede">SmartClinic is a full-stack practice-management platform I built solo: patient records, scheduling, consultations, prescriptions, and billing behind real role-based access, with an AI assistant grounded in the clinic's own data instead of a generic chatbot bolted on top.</p>
+    <div class="meta-row">
+      <span class="chip">👤 <b>Solo build</b> — frontend, backend, AI integration</span>
+      <span class="chip">🩺 <b>Domain</b> — clinic / practice management</span>
+      <span class="chip">🔐 <b>Auth</b> — JWT, role-based (Doctor / Receptionist)</span>
+    </div>
+  </div>
+
+  <svg class="ecg" viewBox="0 0 1000 46" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <pattern id="beat" width="220" height="46" patternUnits="userSpaceOnUse">
+        <path d="M0,23 L60,23 L74,23 L84,4 L96,42 L106,14 L116,23 L220,23" />
+      </pattern>
+    </defs>
+    <rect x="0" y="0" width="1000" height="46" fill="url(#beat)" stroke="none" opacity="0.34" />
+    <path class="sweep" d="M0,23 L60,23 L74,23 L84,4 L96,42 L106,14 L116,23 L220,23 L280,23 L294,23 L304,4 L316,42 L326,14 L336,23 L440,23 L500,23 L514,23 L524,4 L536,42 L546,14 L556,23 L660,23 L720,23 L734,23 L744,4 L756,42 L766,14 L776,23 L880,23 L940,23 L954,23 L964,4 L976,42 L986,14 L996,23 L1000,23" />
+  </svg>
+
+  <!-- Overview -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">01 — Overview</span><h2>Built for a two-person front desk.</h2></div>
+      </div>
+      <p class="pull">"Not every clinic needs an enterprise EMR — most need one system a doctor and a receptionist can both trust with different keys to the same door."</p>
+      <div class="prose">
+        <p>SmartClinic models a small private practice as it actually runs: one doctor handling consultations and prescriptions, one receptionist handling the front desk — patients, scheduling, and payments. Rather than a single flat permission model, the system encodes that split at the API layer, so the UI, the auth tokens, and the server all agree on who can do what.</p>
+        <p>The stack is deliberately boring where it should be — Spring Boot and Postgres for data that has to be right — and a little adventurous where it pays off: a Gemini-backed assistant that answers questions like "what's pending today?" by querying the clinic's live records first, then handing that context to the model, rather than letting it guess.</p>
+      </div>
+      <div class="role-note">
+        <div class="role-card"><div class="who">Doctor · ADMIN</div><p>Full clinical access — consultations, prescriptions, the AI assistant, and every front-desk function too.</p></div>
+        <div class="role-card"><div class="who">Receptionist</div><p>Patients, appointments, and payments — plus read-only access to prescriptions to print for patients.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">02 — Architecture</span><h2>Two codebases, one contract.</h2></div>
+      </div>
+      <div class="arch-grid">
+        <div class="arch-card fe">
+          <span class="tag">Frontend</span>
+          <h3>Next.js App Router</h3>
+          <p class="stack">Next.js 15 · React 19 · TypeScript</p>
+          <ul>
+            <li>Every authenticated page wraps a shared shell — sidebar, topbar, and a floating AI widget — with role-filtered navigation mirroring the server's rules</li>
+            <li>Session lives in a JWT kept client-side; a thin fetch wrapper attaches it to every call and force-logs-out on a 401</li>
+            <li>Role-first login: Doctor and Receptionist are distinct entry points, not a dropdown after the fact</li>
+          </ul>
+        </div>
+        <div class="arch-card be">
+          <span class="tag">Backend</span>
+          <h3>Spring Boot API</h3>
+          <p class="stack">Java 17 · Spring Security · PostgreSQL</p>
+          <ul>
+            <li>Stateless JWT auth with BCrypt-hashed passwords; one <code>SecurityFilterChain</code> is the single source of truth for every route's access rule</li>
+            <li>Seven JPA entities behind Spring Data repositories, schema kept in sync automatically as the domain model evolves</li>
+            <li>A public, unauthenticated stats endpoint exposes clinic-wide counts only — never patient data — for the pre-login screen</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead>
+            <tr><th>Module</th><th>Receptionist</th><th>Doctor</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="module">Patients — view, create, edit</td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td></tr>
+            <tr><td class="module">Patients — delete</td><td><span class="perm"><span class="dot mute"></span>No</span></td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td></tr>
+            <tr><td class="module">Appointments &amp; payments</td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td></tr>
+            <tr><td class="module">Prescriptions — view / print</td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td></tr>
+            <tr><td class="module">Prescriptions — write</td><td><span class="perm"><span class="dot mute"></span>No</span></td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td></tr>
+            <tr><td class="module">Consultations</td><td><span class="perm"><span class="dot mute"></span>No</span></td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td></tr>
+            <tr><td class="module">AI assistant</td><td><span class="perm"><span class="dot mute"></span>No</span></td><td><span class="perm yes"><span class="dot good"></span>Yes</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature tour -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">03 — Walkthrough</span><h2>What each screen actually does.</h2></div>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="fhead"><span class="ficon">📊</span><h3>Dashboard</h3></div>
+          <ul>
+            <li>Today's appointment count, revenue, and a next-up preview at a glance</li>
+            <li>Quick actions jump straight to booking, prescribing, or taking payment</li>
+            <li>View adapts by role — the receptionist's dashboard drops clinical stats entirely</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="fhead"><span class="ficon">👥</span><h3>Patients</h3></div>
+          <ul>
+            <li>Live search by name or phone across the full patient list</li>
+            <li>A detail page consolidates history: appointments, consultations, prescriptions, and billing in one place</li>
+            <li>Delete is doctor-only and warns before removing a record</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="fhead"><span class="ficon">📅</span><h3>Appointments</h3></div>
+          <ul>
+            <li>Bookings grouped by date — newest first — instead of one undifferentiated list</li>
+            <li>List and timeline views of the same schedule</li>
+            <li>Status moves through Scheduled → In Progress → Completed as the doctor actually works through the day</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="fhead"><span class="ficon">🩺</span><h3>Consultation</h3></div>
+          <ul>
+            <li>Symptoms, diagnosis, vitals, and notes captured against a patient's full visit history</li>
+            <li>Saving a consultation closes the loop — it marks the originating appointment complete automatically</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="fhead"><span class="ficon">💊</span><h3>Prescription</h3></div>
+          <ul>
+            <li>Doctor builds an itemized prescription — medicine, dosage, frequency, duration — with live preview</li>
+            <li>Receptionist gets a read-only, searchable view built for printing at the front desk</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="fhead"><span class="ficon">💳</span><h3>Billing</h3></div>
+          <ul>
+            <li>Revenue, pending balance, and invoice count surfaced before the transaction table</li>
+            <li>Pending payments move to Paid in one click; filters keep the table scannable</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="fhead"><span class="ficon">🧑‍⚕️</span><h3>Staff</h3></div>
+          <ul>
+            <li>Doctor-only screen for creating new Doctor or Receptionist accounts</li>
+            <li>Reuses the same signup contract the public sign-up form calls</li>
+          </ul>
+        </div>
+        <div class="feature-card wide ai">
+          <div class="fhead"><span class="ficon">✨</span><h3>AI Assistant — grounded, not generic</h3></div>
+          <ul>
+            <li>Detects intent from the question — a patient's name, "pending payments," "revenue," "appointments" — and pulls the matching rows straight from Postgres before calling the model</li>
+            <li>No vector database or embeddings: matching is plain substring/regex logic against fields already in the clinic's own tables, which keeps every answer traceable back to a real query</li>
+            <li>Every exchange is logged, and every reply carries a visible disclaimer to verify against the record — the assistant is a summary tool, not a clinical decision-maker</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Engineering highlights -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">04 — Field notes</span><h2>A bug worth writing up.</h2></div>
+      </div>
+
+      <div class="case">
+        <div class="tag2">Full-stack</div>
+        <div>
+          <h3>"Completed" that never completed</h3>
+          <p>The appointments dashboard tracked a Completed count that could never move — clicking Start just navigated to the consultation form and touched nothing else. There was no backend path to change an appointment's status beyond cancelling it.</p>
+          <p><span class="fix">Fix:</span> added <code>/start</code> and <code>/complete</code> endpoints, carried the appointment id through the consultation flow via the URL, and closed the loop so saving a consultation marks its appointment done automatically — verified by driving the real UI end-to-end, not just the API in isolation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot-row">
+      <div class="who">Solo full-stack build by <b>Supuni Dissanayake</b> — frontend, backend, and AI integration.</div>
+      <div class="stackcloud">
+        <span>Next.js 15</span><span>React 19</span><span>TypeScript</span><span>Spring Boot 3.4</span><span>Java 17</span><span>PostgreSQL</span><span>Spring Security · JWT</span><span>Gemini API</span>
+      </div>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

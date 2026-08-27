@@ -66,6 +66,33 @@ const postCollection = defineCollection({
   }),
 });
 
+const projectsCollection = defineCollection({
+  loader: glob({ pattern: ['*.md', '*.mdx'], base: 'src/data/projects' }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    order: z.number().optional(),
+    date: z.date().optional(),
+    status: z.enum(['completed', 'ongoing']).optional(),
+    draft: z.boolean().optional(),
+
+    stack: z.array(z.string()),
+    category: z.string().optional(),
+    role: z.enum(['built', 'contributed']).default('built'),
+    image: z.string().optional(),
+    links: z
+      .object({
+        frontend: z.url().optional(),
+        backend: z.url().optional(),
+        repo: z.url().optional(),
+      })
+      .optional(),
+
+    metadata: metadataDefinition(),
+  }),
+});
+
 export const collections = {
   post: postCollection,
+  projects: projectsCollection,
 };
