@@ -1,6 +1,6 @@
 site:
   name: Supuni Dissanayake
-  site: 'https://supuni-dissanayake.netlify.app' # placeholder — update once the Netlify site is created
+  site: 'https://supuni-dissanayake.netlify.app'
   base: '/'
   trailingSlash: false
 
