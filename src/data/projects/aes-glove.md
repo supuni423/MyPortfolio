@@ -1,7 +1,7 @@
 ---
 title: 'AES Glove – IoT-Based Smart Rehabilitation Wearable Glove'
 summary: 'A wearable sensor-based rehabilitation device — I built the grip-strength sensing, the multiplexed sensor-acquisition system, and the real-time web dashboard for a 5-person team project.'
-order: 4
+order: 5
 date: 2025-01-01
 status: 'completed'
 role: 'built'

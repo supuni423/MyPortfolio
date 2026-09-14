@@ -1,7 +1,7 @@
 ---
 title: '3D City Explorer'
 summary: 'A computer graphics group project that visualizes a 3D interactive city environment using OpenGL and C++.'
-order: 6
+order: 7
 date: 2025-01-01
 status: 'completed'
 role: 'contributed'

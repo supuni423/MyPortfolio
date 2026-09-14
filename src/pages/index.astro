@@ -19,7 +19,7 @@ const metadata = {
 };
 
 const projects = await getProjects();
-const featuredIds = ['mentora', 'smartclinic', 'aes-glove', 'mentora-mobile'];
+const featuredIds = ['mentora', 'spendly', 'smartclinic', 'aes-glove', 'mentora-mobile'];
 const otherIds = ['umisf-website', '3d-city-explorer'];
 const isDefined = <T,>(value: T | undefined): value is T => value !== undefined;
 const featuredProjects = featuredIds.map((id) => projects.find((p) => p.id === id)).filter(isDefined);
@@ -209,7 +209,7 @@ const contactLinks = [
     <Fragment slot="content">
       <p>
         Active Member, University of Moratuwa Badminton Team (2024–Present). 2nd Place, Women's Badminton Team at the
-        Sri Lanka University Games (SLUG) 2025. Winner, Inter-Department Badminton Tournament (ShuttleStorm) 2023.
+        Sri Lanka University Games (SLUG) 2025. Winner, Inter-Department Badminton Tournament (ShuttleStorm) 2025.
         Also helped organize the UMISF Badminton Tournament, an island-wide competitive event, in 2025/2026.
       </p>
     </Fragment>
@@ -223,9 +223,9 @@ const contactLinks = [
   >
     <Fragment slot="content">
       <p>
-        Member of MoraSpirit's Creative Design Pillar, contributing to creative and design-related activities. Holds
-        a Diploma in Graphic Design from SIPWAY Campus, and works with Figma, Canva, Adobe Photoshop, and Adobe
-        Illustrator.
+        Member of MoraSpirit's Creative Design Pillar (2024/2025), contributing to creative and design-related
+        activities. Holds a Diploma in Graphic Design from SIPWAY Campus, and works with Figma, Canva, Adobe
+        Photoshop, and Adobe Illustrator.
       </p>
     </Fragment>
   </Content>

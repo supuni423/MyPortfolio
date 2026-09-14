@@ -1,7 +1,7 @@
 ---
 title: 'Mentora Student App'
 summary: 'A Flutter client for the Mentora tutoring marketplace — course discovery, an AI-matched recommendations engine, and the full enrollment lifecycle, built end-to-end against a live production backend.'
-order: 3
+order: 4
 date: 2026-01-01
 status: 'completed'
 role: 'built'

@@ -1,7 +1,7 @@
 ---
 title: 'SmartClinic – Digital Clinic Automation System'
 summary: 'A full-stack practice-management platform built solo — patient records, scheduling, consultations, prescriptions, and billing behind real role-based access, with an AI assistant grounded in the clinic''s own data.'
-order: 2
+order: 3
 date: 2026-01-01
 status: 'completed'
 role: 'built'
