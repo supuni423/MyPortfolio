@@ -6,6 +6,7 @@ date: 2026-01-01
 status: 'completed'
 role: 'contributed'
 category: 'Business Analysis / UI/UX'
+image: '~/assets/images/projects/mgs-erp.png'
 stack: ['Figma', 'Canva', 'Trello', 'Scrum', 'MoSCoW']
 ---
 
