@@ -48,6 +48,8 @@ const links = [
   project.links?.frontend && { text: 'Frontend Repo', href: project.links.frontend },
   project.links?.backend && { text: 'Backend Repo', href: project.links.backend },
   project.links?.repo && { text: 'View Repo', href: project.links.repo },
+  project.links?.prototype && { text: 'View Prototype', href: project.links.prototype },
+  project.links?.video && { text: 'Watch Walkthrough', href: project.links.video },
 ].filter(Boolean) as { text: string; href: string }[];
 ---
 

@@ -85,6 +85,8 @@ const projectsCollection = defineCollection({
         frontend: z.url().optional(),
         backend: z.url().optional(),
         repo: z.url().optional(),
+        prototype: z.url().optional(),
+        video: z.url().optional(),
       })
       .optional(),
 
